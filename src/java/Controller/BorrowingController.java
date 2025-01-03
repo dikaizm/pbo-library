@@ -10,12 +10,14 @@ package Controller;
  */
 //import com.library.dao.BorrowingDAO;
 //import com.library.model.Borrowing;
+import DAO.BookDAO;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
 import DAO.BorrowRecordDAO;
+import Model.Book;
 import Model.BorrowRecord;
 import Model.User;
 import Util.JDBC;
@@ -38,12 +40,13 @@ public class BorrowingController extends HttpServlet {
                 borrowDays = Integer.parseInt(borrowDaysParam);
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Hari pinjam harus berupa angka");
-                request.getRequestDispatcher("book.jsp").forward(request, response);
+                request.getRequestDispatcher(request.getContextPath() + "/book").forward(request, response);
                 return;
             }
         }
 
         BorrowRecordDAO borrowingDAO = new BorrowRecordDAO(JDBC.getInstance().getConnection());
+        BookDAO bookDAO = new BookDAO(JDBC.getInstance().getConnection());
 
         if ("borrow".equals(action)) {
             String bookIdParam = request.getParameter("bookId");
@@ -54,7 +57,7 @@ public class BorrowingController extends HttpServlet {
                     bookId = Integer.parseInt(bookIdParam);
                 } catch (NumberFormatException e) {
                     request.setAttribute("error", "ID buku harus berupa angka");
-                    request.getRequestDispatcher("book.jsp").forward(request, response);
+                    request.getRequestDispatcher(request.getContextPath() + "/book").forward(request, response);
                     return;
                 }
             }
@@ -70,6 +73,19 @@ public class BorrowingController extends HttpServlet {
             System.out.println(user.getName() + " is borrowing book with ID " + bookId + " for " + borrowDays + " days");
 
             try {
+                Book book = bookDAO.getBookById(bookId);
+                if (book.getQuantity() == 0) {
+                    request.setAttribute("error", "Buku tidak tersedia");
+                    request.getRequestDispatcher(request.getContextPath() + "/book").forward(request, response);
+                    return;
+                }
+
+                if (!bookDAO.updateBookQuantity(bookId, book.getQuantity()-1)) {
+                    request.setAttribute("error", "Gagal meminjam buku");
+                    request.getRequestDispatcher(request.getContextPath() + "/book").forward(request, response);
+                    return;
+                }
+
                 borrowingDAO.borrowBook(user.getId(), bookId, borrowDays);
                 response.sendRedirect(request.getContextPath() + "/book/me");
             } catch (SQLException e) {

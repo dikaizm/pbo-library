@@ -47,6 +47,7 @@ public class BookDAO {
                 book.setTitle(rs.getString("title"));
                 book.setDetails(rs.getString("details"));
                 book.setPublisher(rs.getString("publisher"));
+                book.setPublicationYear(rs.getInt("publication_year"));
                 book.setImageUrl(rs.getString("image_url"));
                 book.setQuantity(rs.getInt("quantity"));
 
@@ -72,10 +73,14 @@ public class BookDAO {
             if (rs.next()) {
                 book.setId(rs.getInt("id"));
                 book.setTitle(rs.getString("title"));
+                book.setAuthor(rs.getString("author"));
+                book.setIsbn(rs.getString("isbn"));
+                book.setPublicationYear(rs.getInt("publication_year"));
+                book.setQuantity(rs.getInt("quantity"));
+                book.setCategoryId(rs.getInt("category_id"));
                 book.setDetails(rs.getString("details"));
                 book.setPublisher(rs.getString("publisher"));
                 book.setImageUrl(rs.getString("image_url"));
-                book.setQuantity(rs.getInt("quantity"));
 
                 BookCategory category = new BookCategory();
                 category.setId(rs.getInt("category_id"));
@@ -89,13 +94,55 @@ public class BookDAO {
         return book;
     }
 
-    public void addBook(Book book) throws SQLException {
-        String query = "INSERT INTO books (title, details, publisher) VALUES (?, ?, ?)";
+    public boolean addBook(Book book) throws SQLException {
+        String query = "INSERT INTO books (title, author, isbn, category_id, publication_year, publisher, quantity, details, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, book.getTitle());
-            stmt.setString(2, book.getDetails());
-            stmt.setString(3, book.getPublisher());
-            stmt.executeUpdate();
+            stmt.setString(2, book.getAuthor());
+            stmt.setString(3, book.getIsbn());
+            stmt.setInt(4, book.getCategoryId());
+            stmt.setInt(5, book.getPublicationYear());
+            stmt.setString(6, book.getPublisher());
+            stmt.setInt(7, book.getQuantity());
+            stmt.setString(8, book.getDetails());
+            stmt.setString(9, book.getImageUrl());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean updateBook(Book book) throws SQLException {
+        String query = "UPDATE books SET title = ?, author = ?, isbn = ?, category_id = ?, publication_year = ?, publisher = ?, quantity = ?, details = ?, image_url = ? WHERE id = ?";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, book.getTitle());
+            stmt.setString(2, book.getAuthor());
+            stmt.setString(3, book.getIsbn());
+            stmt.setInt(4, book.getCategoryId());
+            stmt.setInt(5, book.getPublicationYear());
+            stmt.setString(6, book.getPublisher());
+            stmt.setInt(7, book.getQuantity());
+            stmt.setString(8, book.getDetails());
+            stmt.setString(9, book.getImageUrl());
+            stmt.setInt(10, book.getId());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean updateBookQuantity(int bookId, int quantity) throws SQLException {
+        String query = "UPDATE books SET quantity = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, bookId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean deleteBook(int id) throws SQLException {
+        String query = "DELETE FROM books WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
         }
     }
 }

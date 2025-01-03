@@ -4,6 +4,7 @@ import DAO.BookDAO;
 import DAO.BorrowRecordDAO;
 import Model.Book;
 import Model.BorrowRecord;
+import Model.User;
 import Util.JDBC;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/book/me")
 public class BookMeController extends HttpServlet {
@@ -21,6 +23,14 @@ public class BookMeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+
+            if (user == null) {
+                response.sendRedirect(request.getContextPath() + "/auth/login");
+                return;
+            }
+
             // Mendapatkan koneksi dari JDBC
             Connection connection = JDBC.getInstance().getConnection();
             BorrowRecordDAO borrowRecordDAO = new BorrowRecordDAO(connection);
@@ -40,8 +50,8 @@ public class BookMeController extends HttpServlet {
                 }
             }
 
-            List<BorrowRecord> books = borrowRecordDAO.getAllMyBooks(search, categoryId, status);
-            request.setAttribute("books", books);
+            List<BorrowRecord> borrowRecords = borrowRecordDAO.getAllMyBooks(search, categoryId, status);
+            request.setAttribute("borrowRecords", borrowRecords);
             request.setAttribute("search", search);
             request.setAttribute("category", categoryId);
             request.setAttribute("status", status);

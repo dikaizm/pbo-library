@@ -17,21 +17,21 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item d-flex">
           <% 
-            User user = (User) session.getAttribute("user");
-            if (user == null) {
+            User userSession = (User) session.getAttribute("user");
+            if (userSession == null) {
           %>
             <form action="${pageContext.request.contextPath}/auth/login" method="get" class="m-0">
               <button type="submit" class="btn btn-link nav-link text-dark">Masuk</button>
             </form>
           <%
             } else {
-                String role = user.getRole();
+                String role = userSession.getRole();
                 if ("librarian".equals(role)) {
             %>
-                <form action="manage/books.jsp" method="get" class="m-0">
+                <form action="${pageContext.request.contextPath}/manage/books" method="get" class="m-0">
                   <button type="submit" class="btn btn-link nav-link text-dark">Kelola Buku</button>
                 </form>
-                <form action="manage/users.jsp" method="get" class="m-0">
+                <form action="${pageContext.request.contextPath}/manage/users" method="get" class="m-0">
                   <button type="submit" class="btn btn-link nav-link text-dark">Kelola Pengguna</button>
                 </form>
             <% 
@@ -42,10 +42,10 @@
                 </form>
             <% } %>
 
-            <form action="profile.jsp" method="get" class="m-0">
+            <form action="${pageContext.request.contextPath}/profile" method="get" class="m-0">
               <button type="submit" class="btn btn-link nav-link text-dark">Profil</button>
             </form>
-            <form action="auth/logout" method="get" class="m-0">
+            <form action="${pageContext.request.contextPath}/auth/logout" method="get" class="m-0">
               <button type="submit" class="btn btn-link nav-link text-dark">Keluar</button>
             </form>
           <% } %>

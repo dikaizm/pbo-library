@@ -20,9 +20,42 @@ public class BorrowRecordDAO {
 
     public List<BorrowRecord> getAllMyBooks(String title, int categoryId, String status) throws SQLException {
         List<BorrowRecord> borrowings = new ArrayList<>();
-        String sql = "SELECT br.*, b.*, bc.`name` AS 'category_name' FROM borrow_records br JOIN books b ON b.id = br.book_id JOIN book_categories bc ON b.category_id = bc.id WHERE status = 'borrowed';";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        StringBuilder sql = new StringBuilder(
+            "SELECT br.*, b.*, bc.name AS 'category_name' " +
+            "FROM borrow_records br " +
+            "JOIN books b ON b.id = br.book_id " +
+            "JOIN book_categories bc ON b.category_id = bc.id " +
+            "WHERE 1=1"
+        );
+    
+        // Add filters dynamically based on input
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND br.status = ?");
+        }
+        if (title != null && !title.isEmpty()) {
+            sql.append(" AND b.title LIKE ?");
+        }
+        if (categoryId > 0) {
+            sql.append(" AND b.category_id = ?");
+        }
+    
+        // Add sorting
+        sql.append(" ORDER BY b.title ASC");
+    
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+    
+            // Set parameters based on conditions
+            if (status != null && !status.isEmpty()) {
+                stmt.setString(paramIndex++, status);
+            }
+            if (title != null && !title.isEmpty()) {
+                stmt.setString(paramIndex++, "%" + title + "%");
+            }
+            if (categoryId > 0) {
+                stmt.setInt(paramIndex++, categoryId);
+            }
+    
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 BorrowRecord borrow = new BorrowRecord();
@@ -32,20 +65,24 @@ public class BorrowRecordDAO {
                 borrow.setBorrowDate(rs.getDate("borrow_date"));
                 borrow.setDueDate(rs.getDate("due_date"));
                 borrow.setStatus(rs.getString("status"));
-
+    
                 Book book = new Book();
                 book.setId(rs.getInt("book_id"));
+                book.setTitle(rs.getString("title"));
+                book.setImageUrl(rs.getString("image_url"));
                 book.setAuthor(rs.getString("author"));
                 book.setPublisher(rs.getString("publisher"));
                 book.setPublicationYear(rs.getInt("publication_year"));
+                book.setQuantity(rs.getInt("quantity"));
                 book.setCategory(new BookCategory(rs.getString("category_name")));
-
+    
+                borrow.setBook(book);
                 borrowings.add(borrow);
             }
         }
-
+    
         return borrowings;
-    }
+    }    
 
     public boolean borrowBook(int userId, int bookId, int borrowDays) throws SQLException {
         Date currentDate = new Date(System.currentTimeMillis());

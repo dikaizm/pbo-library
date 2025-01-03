@@ -23,7 +23,7 @@
     <div class="container mt-5" style="height: 100%;">
 
       <div class="d-flex justify-content-center mb-4">
-        <form action="book/me" method="get" class="d-flex w-75">
+        <form action="${pageContext.request.contextPath}/book/me" method="get" class="d-flex w-75">
           <input
             type="text"
             name="search"
@@ -46,10 +46,9 @@
           </select>
 
           <select name="status" class="form-select ms-3 w-25">
-            <option value="">Semua Status</option>
-            <option value="borrowed">Dipinjam</option>
-            <option value="returned">Dikembalikan</option>
-            <option value="overdue">Telat</option>
+            <option value="borrowed" <%= "borrowed".equals(request.getParameter("status")) ? "selected" : "" %>>Dipinjam</option>
+            <option value="returned" <%= "returned".equals(request.getParameter("status")) ? "selected" : "" %>>Dikembalikan</option>
+            <option value="overdue" <%= "overdue".equals(request.getParameter("status")) ? "selected" : "" %>>Telat</option>
           </select>
 
           <button type="submit" class="btn btn-primary ms-3">Cari</button>
@@ -58,22 +57,21 @@
 
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
         <% 
-          List<BorrowRecord> books = (List<BorrowRecord>) request.getAttribute("books");
-          if (books != null && !books.isEmpty()) {
-            for (BorrowRecord book : books) {
+          List<BorrowRecord> borrowRecords = (List<BorrowRecord>) request.getAttribute("borrowRecords");
+          if (borrowRecords != null && !borrowRecords.isEmpty()) {
+            for (BorrowRecord book : borrowRecords) {
         %>
         <div class="col">
           <div class="card" style="width: 12rem;">
             <!-- Book Image -->
-            <a href="book?id=<%= book.getId() %>" class="text-decoration-none text-dark">
+            <a href="${pageContext.request.contextPath}/book?id=<%= book.getBook().getId() %>" class="text-decoration-none text-dark">
               <div class="card-img-container" style="width: 100%; height: 240px; overflow: hidden;">
-                <img src="<%= book.getImageUrl() %>" class="card-img-top img-fluid" alt="<%= book.getTitle() %>" style="object-fit: cover; width: 100%; height: 100%;">
+                <img src="<%= book.getBook().getImageUrl() %>" class="card-img-top img-fluid" alt="<%= book.getBook().getTitle() %>" style="object-fit: cover; width: 100%; height: 100%;">
             </div>
               <div class="card-body">
-                  <h5 class="card-title"><%= book.getTitle() %></h5>
-                  <p class="card-text">Penerbit: <%= book.getPublisher() %></p>
-                  <p class="card-text">Kategori: <%= book.getCategory().getName() %></p>
-                  <p class="card-text">Stok: <%= book.getQuantity() %></p>
+                  <h5 class="card-title"><%= book.getBook().getTitle() %></h5>
+                  <p class="card-text">Penerbit: <%= book.getBook().getPublisher() %></p>
+                  <p class="card-text">Kategori: <%= book.getBook().getCategory().getName() %></p>
               </div>
           </a>
           </div>

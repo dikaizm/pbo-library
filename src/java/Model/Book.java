@@ -15,7 +15,7 @@ public class Book {
     private String author;
     private String isbn;
     private int publicationYear;
-    private String categoryId;
+    private int categoryId;
     private BookCategory category;
     private int quantity;
     private String details;
@@ -24,7 +24,7 @@ public class Book {
 
     public Book() {}
 
-    public Book(int id, String title, String author, String isbn, int publicationYear, String categoryId, int quantity, String details, String publisher, String imageUrl) {
+    public Book(int id, String title, String author, String isbn, int publicationYear, int categoryId, int quantity, String details, String publisher, String imageUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -110,14 +110,14 @@ public class Book {
     /**
      * @return the categoryId
      */
-    public String getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
     /**
      * @param categoryId the categoryId to set
      */
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 

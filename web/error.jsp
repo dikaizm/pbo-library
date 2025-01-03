@@ -10,7 +10,7 @@
             <h1 class="text-danger">Oops! Something went wrong.</h1>
             <p>An error occurred while processing your request.</p>
             <p><strong>Error Details:</strong> <%= request.getAttribute("error") %></p>
-            <a href="index.jsp" class="btn btn-primary">Go Back to Home</a>
+            <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">Go Back to Home</a>
         </div>
     </body>
 </html>

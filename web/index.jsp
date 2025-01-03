@@ -17,7 +17,7 @@
       }
     </style>
   </head>
-  <body class="bg-light" style="min-height: 100vh;">
+  <body class="bg-light">
     <%@include file="components/navbar.jsp" %>
 
     <div class="container mt-5" style="height: 100%;">

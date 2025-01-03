@@ -8,10 +8,10 @@ package Model;
  *
  * @author tiara
  */
-
 import java.sql.Date;
 
 public class BorrowRecord {
+
     private int id;
     private int bookId;
     private Book book;
@@ -31,6 +31,14 @@ public class BorrowRecord {
         this.userId = userId;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
+    }
+
+    public boolean isOverdue() {
+        return returnDate == null && dueDate.before(new Date(System.currentTimeMillis()));
+    }
+
+    public boolean isReturned() {
+        return returnDate != null;
     }
 
     /**

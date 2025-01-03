@@ -48,21 +48,7 @@
             <hr />
           </div>
 
-          <div>
-            <% if (book.getQuantity() > 0 && session.getAttribute("user") != null) { %>
-            <form action="borrowing" method="post" class="d-flex w-50">
-              <input type="hidden" name="action" value="borrow">
-
-              <input type="hidden" name="bookId" value="<%= book.getId() %>" />
-              <label for="borrowDays">Hari</label>
-              <input type="number" name="borrowDays" id="borrowDays" class="form-control w-25 ms-3" />
-
-              <button type="submit" class="btn btn-primary ms-3">Pinjam</button>
-            </form>
-            <% } %>
-          </div>
-
-          <div><a href="home" class="btn btn-secondary mt-3">Kembali</a></div>
+          <div><a href="${pageContext.request.contextPath}/manage/books" class="btn btn-secondary mt-3">Kembali</a></div>
         </div>
       </div>
       <% } else { %>
