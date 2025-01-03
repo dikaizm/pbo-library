@@ -148,6 +148,12 @@ public class ManageBooksController extends HttpServlet {
                     return;
                 }
 
+                if (bookDAO.isIsbnExists(isbn)) {
+                    request.setAttribute("error", "ISBN sudah digunakan");
+                    request.getRequestDispatcher(request.getContextPath() + "/manage/add_book.jsp").forward(request, response);
+                    return;
+                }
+
                 int categoryId = Integer.parseInt(categoryIdStr);
                 int publicationYear = Integer.parseInt(publicationYearStr);
                 int quantity = Integer.parseInt(quantityStr);
@@ -215,7 +221,7 @@ public class ManageBooksController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.getRequestDispatcher(request.getContextPath() + "/error.jsp").forward(request, response);
         }
     }
 }

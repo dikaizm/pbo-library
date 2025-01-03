@@ -36,8 +36,8 @@ public class ManageUsersController extends HttpServlet {
             if ("delete".equals(action)) {
 
             } else if ("view_user".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                User user = userDAO.getUserById(id);
+                String email = request.getParameter("email");
+                User user = userDAO.getUserByEmail(email);
                 request.setAttribute("user", user);
                 request.getRequestDispatcher("view_user.jsp").forward(request, response);
             } else {

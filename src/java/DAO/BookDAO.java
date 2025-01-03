@@ -14,6 +14,16 @@ public class BookDAO {
         this.connection = connection;
     }
 
+    public boolean isIsbnExists(String isbn) throws SQLException {
+        String query = "SELECT COUNT(*) AS count FROM books WHERE isbn = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, isbn);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt("count") > 0;
+        }
+    }
+
     public List<Book> getAllBooks(String title, int categoryId) throws SQLException {
         List<Book> books = new ArrayList<>();
         String query;

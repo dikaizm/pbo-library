@@ -72,6 +72,8 @@
                   <h5 class="card-title"><%= book.getBook().getTitle() %></h5>
                   <p class="card-text">Penerbit: <%= book.getBook().getPublisher() %></p>
                   <p class="card-text">Kategori: <%= book.getBook().getCategory().getName() %></p>
+                  <p class="card-text">Status: <%= book.getStatus() %></p>
+                  <p class="card-text">Tenggat: <%= book.getDueDate() %></p>
               </div>
           </a>
           </div>
