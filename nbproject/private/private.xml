@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/E:/pbo/pbo-library/src/java/Model/Book.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Util/JDBC.java</file>
+            <file>file:/E:/pbo/pbo-library/web/Borrowing.jsp</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Controller/LogoutController.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Controller/checkConnection.java</file>
+            <file>file:/E:/pbo/pbo-library/web/Student.jsp</file>
+            <file>file:/E:/pbo/pbo-library/web/signup.jsp</file>
+            <file>file:/E:/pbo/pbo-library/web/index.jsp</file>
+            <file>file:/E:/pbo/pbo-library/web/login.jsp</file>
+            <file>file:/E:/pbo/pbo-library/web/User.jsp</file>
+            <file>file:/E:/pbo/pbo-library/web/Book.jsp</file>
+            <file>file:/E:/pbo/pbo-library/src/java/DAO/BorrowingDAO.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Model/Borrowing.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/DAO/BookDAO.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Model/User.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Controller/BookController.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Controller/BorrowingController.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Controller/LoginController.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Model/Librarian.java</file>
+            <file>file:/E:/pbo/pbo-library/src/java/DAO/UserDAO.java</file>
+            <file>file:/E:/pbo/pbo-library/web/Librarian.jsp</file>
+            <file>file:/E:/pbo/pbo-library/src/java/Model/Student.java</file>
+        </group>
+    </open-files>
+</project-private>
