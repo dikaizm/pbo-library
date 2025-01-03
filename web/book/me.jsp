@@ -1,4 +1,4 @@
-<%@page import="Model.Book"%>
+<%@page import="Model.BorrowRecord"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manajemen Perpustakaan</title>
+    <title>Buku Saya</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
@@ -18,12 +18,12 @@
     </style>
   </head>
   <body class="bg-light" style="min-height: 100vh;">
-    <%@include file="components/navbar.jsp" %>
+    <%@include file="../components/navbar.jsp" %>
 
     <div class="container mt-5" style="height: 100%;">
 
       <div class="d-flex justify-content-center mb-4">
-        <form action="home" method="get" class="d-flex w-75">
+        <form action="book/me" method="get" class="d-flex w-75">
           <input
             type="text"
             name="search"
@@ -44,15 +44,23 @@
             <option value="9" <%= "9".equals(request.getParameter("category")) ? "selected" : "" %>>Seni</option>
             <option value="10" <%= "10".equals(request.getParameter("category")) ? "selected" : "" %>>Pengembangan Diri</option>
           </select>
+
+          <select name="status" class="form-select ms-3 w-25">
+            <option value="">Semua Status</option>
+            <option value="borrowed">Dipinjam</option>
+            <option value="returned">Dikembalikan</option>
+            <option value="overdue">Telat</option>
+          </select>
+
           <button type="submit" class="btn btn-primary ms-3">Cari</button>
         </form>
       </div>      
 
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
         <% 
-          List<Book> books = (List<Book>) request.getAttribute("books");
+          List<BorrowRecord> books = (List<BorrowRecord>) request.getAttribute("books");
           if (books != null && !books.isEmpty()) {
-            for (Book book : books) {
+            for (BorrowRecord book : books) {
         %>
         <div class="col">
           <div class="card" style="width: 12rem;">

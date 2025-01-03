@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import Util.JDBC;
 // Servlet ini diakses melalui /checkConnection
 @WebServlet("/checkConnection")
-public class checkConnection extends HttpServlet {
+public class CheckConnection extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {

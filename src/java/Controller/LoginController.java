@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-@WebServlet("/LoginController")
+@WebServlet("/auth/login")
 public class LoginController extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,11 +25,11 @@ public class LoginController extends HttpServlet {
         try {
             if ("login".equals(action)) {
                 // Ambil parameter username dan password
-                String username = request.getParameter("username");
+                String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
                 // Validasi input
-                if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+                if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
                     request.setAttribute("error", "Username or password cannot be empty.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
@@ -37,17 +37,19 @@ public class LoginController extends HttpServlet {
 
                 // Panggil DAO untuk memvalidasi user
                 UserDAO userDAO = new UserDAO(JDBC.getInstance().getConnection());
-                User user = userDAO.getUserByUsernameAndPassword(username, password);
+                User user = userDAO.getUserByEmail(email);
 
                 if (user != null) {
-                    HttpSession session = request.getSession();
-                    if (user instanceof Librarian) {
-                        session.setAttribute("librarian", user);
-                        response.sendRedirect("Librarian.jsp");
-                    } else if (user instanceof Student) {
-                        session.setAttribute("student", user);
-                        response.sendRedirect("Student.jsp");
+                    if (!password.equals(user.getPassword())) {
+                        request.setAttribute("error", "Invalid username or password.");
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        return;
                     }
+
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
+
+                    response.sendRedirect(request.getContextPath() + "/home");
                 } else {
                     request.setAttribute("error", "Invalid username or password.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);

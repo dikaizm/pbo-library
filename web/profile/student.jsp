@@ -14,8 +14,8 @@
 <body>
     <div class="container mt-5">
         <h2>Student Profile</h2>
-        <p>Name: <%= ((Student) request.getAttribute("student")).getName() %></p>
-        <p>Course: <%= ((Student) request.getAttribute("student")).getCourse() %></p>
+        <p>Name: <%= ((Student) session.getAttribute("student") != null ? ((Student) session.getAttribute("student")).getName() : "Unknown") %></p>
+        <p>Course: <%= ((Student) session.getAttribute("student") != null ? ((Student) session.getAttribute("student")).getCourse() : "Unknown") %></p>        
     </div>
 </body>
 </html>

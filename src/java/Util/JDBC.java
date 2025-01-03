@@ -15,9 +15,6 @@ package Util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class JDBC {
     private static JDBC instance;
@@ -26,7 +23,7 @@ public class JDBC {
     private JDBC() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:4306/library","root","Tsr190719*");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/library_db","root","12345678");
         } catch (Exception e) {
             e.printStackTrace();
         }

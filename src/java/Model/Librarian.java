@@ -16,8 +16,13 @@ public class Librarian extends User {
         super();
     }
 
-    public Librarian(int id, String name, String username, String password, String department) {
-        super(id, name, username, password);
+    public Librarian(String name, String email, String password, String department) {
+        super(name, email, password);
+        this.department = department;
+    }
+
+    public Librarian(int id, String name, String email, String password, String department) {
+        super(id, name, email, password);
         this.department = department;
     }
 
@@ -27,6 +32,6 @@ public class Librarian extends User {
 
     @Override
     public String getRole() {
-        return "Librarian";
+        return "librarian";
     }
 }

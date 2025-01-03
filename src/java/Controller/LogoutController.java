@@ -12,7 +12,9 @@ package Controller;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/auth/logout")
 public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -20,7 +22,7 @@ public class LogoutController extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        response.sendRedirect("login.jsp");
+        response.sendRedirect(request.getContextPath() + "/auth/login");
     }
 }
 

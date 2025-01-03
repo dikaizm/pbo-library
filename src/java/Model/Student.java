@@ -10,23 +10,28 @@ package Model;
  */
 
 public class Student extends User {
-    private String course;
+    private String major;
 
     public Student(){
         super();
     }
+
+    public Student(String name, String email, String password, String major) {
+        super(name, email, password);
+        this.major = major;
+    }
     
-    public Student(int id, String name, String username, String password, String course) {
-        super(id, name, username, password);
-        this.course = course;
+    public Student(int id, String name, String email, String password, String major) {
+        super(id, name, email, password);
+        this.major = major;
     }
 
-    public String getCourse() {
-        return course;
+    public String getMajor() {
+        return major;
     }
 
     @Override
     public String getRole() {
-        return "Student";
+        return "student";
     }
 }

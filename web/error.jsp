@@ -9,7 +9,7 @@
         <div class="container mt-5 text-center">
             <h1 class="text-danger">Oops! Something went wrong.</h1>
             <p>An error occurred while processing your request.</p>
-            <p><strong>Error Details:</strong> <%= request.getAttribute("errorDetails") %></p>
+            <p><strong>Error Details:</strong> <%= request.getAttribute("error") %></p>
             <a href="index.jsp" class="btn btn-primary">Go Back to Home</a>
         </div>
     </body>

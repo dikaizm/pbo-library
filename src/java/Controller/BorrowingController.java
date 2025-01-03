@@ -8,7 +8,6 @@ package Controller;
  *
  * @author tiara
  */
-
 //import com.library.dao.BorrowingDAO;
 //import com.library.model.Borrowing;
 import javax.servlet.*;
@@ -16,41 +15,68 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import DAO.BorrowingDAO;
-import Model.Borrowing;
-import java.util.List;
+import DAO.BorrowRecordDAO;
+import Model.BorrowRecord;
+import Model.User;
+import Util.JDBC;
 
+import java.util.List;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/borrowing")
 public class BorrowingController extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        BorrowingDAO borrowingDAO = new BorrowingDAO();
 
-        try {
-            if ("borrow".equals(action)) {
-                int bookId = Integer.parseInt(request.getParameter("bookId"));
-                int userId = Integer.parseInt(request.getParameter("userId"));
-                borrowingDAO.addBorrowing(new Borrowing(0, bookId, userId, new java.sql.Date(System.currentTimeMillis()), null));
-            } else if ("return".equals(action)) {
-                int borrowingId = Integer.parseInt(request.getParameter("borrowingId"));
-                borrowingDAO.returnBook(borrowingId);
+        String borrowDaysParam = request.getParameter("borrowDays");
+        int borrowDays = 0; // Default value in case the parameter is missing or invalid
+
+        if (borrowDaysParam != null && !borrowDaysParam.isEmpty()) {
+            try {
+                borrowDays = Integer.parseInt(borrowDaysParam);
+            } catch (NumberFormatException e) {
+                request.setAttribute("error", "Hari pinjam harus berupa angka");
+                request.getRequestDispatcher("book.jsp").forward(request, response);
+                return;
             }
-            response.sendRedirect("BorrowingController");
-        } catch (SQLException e) {
-            throw new ServletException("Error processing borrowing operation", e);
         }
-    }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BorrowingDAO borrowingDAO = new BorrowingDAO();
-        try {
-            List<Borrowing> borrowings = borrowingDAO.getAllBorrowings();
-            request.setAttribute("borrowings", borrowings); // Forward borrowing data to JSP
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Borrowing.jsp");
-            dispatcher.forward(request, response);
-        } catch (SQLException e) {
-            throw new ServletException("Error retrieving borrowings", e);
+        BorrowRecordDAO borrowingDAO = new BorrowRecordDAO(JDBC.getInstance().getConnection());
+
+        if ("borrow".equals(action)) {
+            String bookIdParam = request.getParameter("bookId");
+            int bookId = 0; // Default value in case the parameter is missing or invalid
+
+            if (bookIdParam != null && !bookIdParam.isEmpty()) {
+                try {
+                    bookId = Integer.parseInt(bookIdParam);
+                } catch (NumberFormatException e) {
+                    request.setAttribute("error", "ID buku harus berupa angka");
+                    request.getRequestDispatcher("book.jsp").forward(request, response);
+                    return;
+                }
+            }
+
+            User user = (User) request.getSession().getAttribute("user");
+
+            if (user == null) {
+                request.setAttribute("error", "Anda harus login terlebih dahulu");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            System.out.println(user.getName() + " is borrowing book with ID " + bookId + " for " + borrowDays + " days");
+
+            try {
+                borrowingDAO.borrowBook(user.getId(), bookId, borrowDays);
+                response.sendRedirect(request.getContextPath() + "/book/me");
+            } catch (SQLException e) {
+                throw new ServletException("Error borrowing book", e);
+            }
+        } else if ("return".equals(action)) {
+
         }
     }
 }

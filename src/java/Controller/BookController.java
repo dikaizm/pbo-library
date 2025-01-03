@@ -13,28 +13,37 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
-@WebServlet("/BookController")
+@WebServlet("/book")
 public class BookController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // Mendapatkan parameter id dari URL
+            String id = request.getParameter("id");
+
+            System.out.println("id: " + id);
+
             // Mendapatkan koneksi dari JDBC
             Connection connection = JDBC.getInstance().getConnection();
             BookDAO bookDAO = new BookDAO(connection);
 
-            // Mengambil semua buku dari database
-            List<Book> books = bookDAO.getAllBooks();
+            if (id == null || id.isEmpty()) {
+                request.setAttribute("error", "ID buku tidak ditemukan");
+                request.getRequestDispatcher("../error.jsp").forward(request, response);
+                return;
+            }
 
-            // Menyimpan data buku ke request agar bisa digunakan di Librarian.jsp
-            request.setAttribute("books", books);
+            // Mendapatkan detail buku berdasarkan id
+            Book book = bookDAO.getBookById(Integer.parseInt(id));
+            request.setAttribute("book", book);
 
-            // Forward ke Librarian.jsp
-            request.getRequestDispatcher("Librarian.jsp").forward(request, response);
+            // Menampilkan halaman detail buku
+            request.getRequestDispatcher("book/detail.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.getRequestDispatcher("../error.jsp").forward(request, response);
         }
     }
 
@@ -61,7 +70,7 @@ public class BookController extends HttpServlet {
                 bookDAO.addBook(book);
 
                 // Redirect kembali ke halaman Librarian.jsp
-                response.sendRedirect("BookController");
+                response.sendRedirect("Librarian.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();
