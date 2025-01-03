@@ -65,8 +65,8 @@
               <td><%= user.countBorrowedBooks() %></td>
               <td><%= user.countOverdueBooks() %></td>
               <td>
-                <a href="user?id=<%= user.getId() %>" class="btn btn-info btn-sm">Lihat</a>
-                <a href="user?id=<%= user.getId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">Hapus</a>
+                <a href="user?action=view_page&email=<%= user.getEmail() %>" class="btn btn-info btn-sm">Lihat</a>
+                <a href="user?action=delete&id=<%= user.getId() %>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">Hapus</a>
               </td>
             </tr>
             <% 

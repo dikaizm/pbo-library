@@ -29,6 +29,10 @@ public class Student extends User {
         this.major = major;
     }
 
+    public List<BorrowRecord> getBorrowRecords() {
+        return borrowRecords;
+    }
+
     public void setBorrowRecords(List<BorrowRecord> borrowRecords) {
         this.borrowRecords = borrowRecords;
     }

@@ -24,6 +24,14 @@ public class User {
         this.password = password;
     }
 
+    public boolean isLibrarian() {
+        return "librarian".equals(role);
+    }
+
+    public boolean isStudent() {
+        return "student".equals(role);
+    }
+
     public int getId() {
         return id;
     }

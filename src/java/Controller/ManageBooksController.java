@@ -2,6 +2,7 @@ package Controller;
 
 import DAO.BookDAO;
 import Model.Book;
+import Model.User;
 import Util.JDBC;
 
 import javax.servlet.ServletException;
@@ -33,9 +34,19 @@ public class ManageBooksController extends HttpServlet {
             String action = request.getParameter("action");
 
             if ("add_page".equals(action)) {
+                User currentUser = (User) session.getAttribute("user");
+                if (currentUser == null || !currentUser.isLibrarian()) {
+                    response.sendRedirect(request.getContextPath() + "/manage/books");
+                    return;
+                }
                 request.getRequestDispatcher("add_book.jsp").forward(request, response);
                 return;
             } else if ("edit_page".equals(action)) {
+                User currentUser = (User) session.getAttribute("user");
+                if (currentUser == null || !currentUser.isLibrarian()) {
+                    response.sendRedirect(request.getContextPath() + "/manage/books");
+                    return;
+                }
                 String bookIdParam = request.getParameter("id");
 
                 if (bookIdParam != null && !bookIdParam.isEmpty()) {
@@ -76,6 +87,12 @@ public class ManageBooksController extends HttpServlet {
             }
 
             if ("delete".equals(action)) {
+                User currentUser = (User) session.getAttribute("user");
+                if (currentUser == null || !currentUser.isLibrarian()) {
+                    response.sendRedirect(request.getContextPath() + "/manage/books");
+                    return;
+                }
+
                 String bookIdParam = request.getParameter("id");
 
                 if (bookIdParam != null && !bookIdParam.isEmpty()) {
@@ -132,6 +149,12 @@ public class ManageBooksController extends HttpServlet {
             String action = request.getParameter("action");
 
             if ("add".equals(action)) {
+                User currentUser = (User) session.getAttribute("user");
+                if (currentUser == null || !currentUser.isLibrarian()) {
+                    response.sendRedirect(request.getContextPath() + "/manage/books");
+                    return;
+                }
+
                 String title = request.getParameter("title");
                 String author = request.getParameter("author");
                 String isbn = request.getParameter("isbn");
@@ -144,13 +167,13 @@ public class ManageBooksController extends HttpServlet {
 
                 if (title == null || title.isEmpty() || author == null || author.isEmpty() || isbn == null || isbn.isEmpty() || categoryIdStr == null || categoryIdStr.isEmpty() || publicationYearStr == null || publicationYearStr.isEmpty() || publisher == null || publisher.isEmpty() || quantityStr == null || quantityStr.isEmpty() || details == null || details.isEmpty() || imageUrl == null || imageUrl.isEmpty()) {
                     request.setAttribute("error", "Semua field harus diisi");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/add_book.jsp").forward(request, response);
+                    request.getRequestDispatcher(request.getContextPath() + "/manage/books?action=add_page").forward(request, response);
                     return;
                 }
 
                 if (bookDAO.isIsbnExists(isbn)) {
                     request.setAttribute("error", "ISBN sudah digunakan");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/add_book.jsp").forward(request, response);
+                    request.getRequestDispatcher(request.getContextPath() + "/manage/books?action=add_page").forward(request, response);
                     return;
                 }
 
@@ -173,10 +196,16 @@ public class ManageBooksController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/manage/books");
                 } else {
                     request.setAttribute("error", "Gagal menambahkan buku");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/add_book.jsp").forward(request, response);
+                    request.getRequestDispatcher(request.getContextPath() + "/manage/books?action=add_page").forward(request, response);
                 }
 
             } else if ("edit".equals(action)) {
+                User currentUser = (User) session.getAttribute("user");
+                if (currentUser == null || !currentUser.isLibrarian()) {
+                    response.sendRedirect(request.getContextPath() + "/manage/books");
+                    return;
+                }
+
                 String bookIdStr = request.getParameter("id");
                 String title = request.getParameter("title");
                 String author = request.getParameter("author");

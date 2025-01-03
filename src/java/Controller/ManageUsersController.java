@@ -35,10 +35,11 @@ public class ManageUsersController extends HttpServlet {
 
             if ("delete".equals(action)) {
 
-            } else if ("view_user".equals(action)) {
+            } else if ("view_page".equals(action)) {
                 String email = request.getParameter("email");
-                User user = userDAO.getUserByEmail(email);
+                Student user = userDAO.getStudentByEmail(email);
                 request.setAttribute("user", user);
+                request.setAttribute("borrowings", user.getBorrowRecords());
                 request.getRequestDispatcher("view_user.jsp").forward(request, response);
             } else {
                 String search = request.getParameter("search");
