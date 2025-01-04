@@ -22,71 +22,124 @@
     <div class="container mt-5 w-50">
       <h2 class="mb-4">Tambah Buku</h2>
 
+      <% if (request.getAttribute("error") != null) { %>
+        <div class="alert alert-danger text-center">
+          <%= request.getAttribute("error") %>
+        </div>
+      <% } %>
+
       <form action="${pageContext.request.contextPath}/manage/books?action=add" method="post">
         <div class="mb-3">
           <label for="title" class="form-label">Judul Buku</label>
-          <input type="text" class="form-control" id="title" name="title" required />
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+            value="<%= request.getAttribute("title") != null ? request.getAttribute("title") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="author" class="form-label">Penulis</label>
-          <input type="text" class="form-control" id="author" name="author" required />
+          <input
+            type="text"
+            class="form-control"
+            id="author"
+            name="author"
+            required
+            value="<%= request.getAttribute("author") != null ? request.getAttribute("author") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="isbn" class="form-label">ISBN</label>
-          <input type="text" class="form-control" id="isbn" name="isbn" />
+          <input
+            type="text"
+            class="form-control"
+            id="isbn"
+            name="isbn"
+            value="<%= request.getAttribute("isbn") != null ? request.getAttribute("isbn") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="category" class="form-label">Kategori</label>
           <select class="form-select" id="category" name="category" required>
             <option value="">Pilih Kategori</option>
-            <option value="1">Fiksi</option>
-            <option value="2">Ilmu Pengetahuan</option>
-            <option value="3">Sejarah</option>
-            <option value="4">Biografi</option>
-            <option value="5">Teknologi</option>
-            <option value="6">Filsafat</option>
-            <option value="7">Misteri</option>
-            <option value="8">Fantasi</option>
-            <option value="9">Seni</option>
-            <option value="10">Pengembangan Diri</option>
+            <% 
+              String selectedCategory = (String) request.getAttribute("category");
+              String[] categories = { "Fiksi", "Ilmu Pengetahuan", "Sejarah", "Biografi", "Teknologi", "Filsafat", "Misteri", "Fantasi", "Seni", "Pengembangan Diri" };
+              for (int i = 0; i < categories.length; i++) {
+                String value = String.valueOf(i + 1);
+            %>
+            <option value="<%= value %>" <%= value.equals(selectedCategory) ? "selected" : "" %>>
+              <%= categories[i] %>
+            </option>
+            <% } %>
           </select>
         </div>
 
         <div class="mb-3">
           <label for="publicationYear" class="form-label">Tahun Terbit</label>
-          <input type="number" class="form-control" id="publicationYear" name="publicationYear" required />
+          <input
+            type="number"
+            class="form-control"
+            id="publicationYear"
+            name="publicationYear"
+            required
+            value="<%= request.getAttribute("publicationYear") != null ? request.getAttribute("publicationYear") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="publisher" class="form-label">Penerbit</label>
-          <input type="text" class="form-control" id="publisher" name="publisher" required />
+          <input
+            type="text"
+            class="form-control"
+            id="publisher"
+            name="publisher"
+            required
+            value="<%= request.getAttribute("publisher") != null ? request.getAttribute("publisher") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="quantity" class="form-label">Stok</label>
-          <input type="number" class="form-control" id="quantity" name="quantity" required />
+          <input
+            type="number"
+            class="form-control"
+            id="quantity"
+            name="quantity"
+            required
+            value="<%= request.getAttribute("quantity") != null ? request.getAttribute("quantity") : "" %>"
+          />
         </div>
 
         <div class="mb-3">
           <label for="details" class="form-label">Detail Buku</label>
-          <textarea class="form-control" id="details" name="details"></textarea>
+          <textarea
+            class="form-control"
+            id="details"
+            name="details"
+          ><%= request.getAttribute("details") != null ? request.getAttribute("details") : "" %></textarea>
         </div>
 
         <div class="mb-3">
           <label for="imageUrl" class="form-label">URL Gambar</label>
-          <input type="text" class="form-control" id="imageUrl" name="imageUrl" />
+          <input
+            type="text"
+            class="form-control"
+            id="imageUrl"
+            name="imageUrl"
+            value="<%= request.getAttribute("imageUrl") != null ? request.getAttribute("imageUrl") : "" %>"
+          />
         </div>
 
         <button type="submit" class="btn btn-primary">Tambah Buku</button>
         <a href="${pageContext.request.contextPath}/manage/books" class="btn btn-secondary ms-3">Batal</a>
       </form>
-
-      <% if (request.getAttribute("error") != null) { %>
-        <p class="text-danger mt-3 text-center">Invalid email or password</p>
-        <% } %>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

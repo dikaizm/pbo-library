@@ -34,7 +34,7 @@ public class BorrowRecord {
     }
 
     public boolean isOverdue() {
-        return returnDate == null && dueDate.before(new Date(System.currentTimeMillis()));
+        return dueDate.before(new Date(System.currentTimeMillis())) && !isReturned();
     }
 
     public boolean isReturned() {

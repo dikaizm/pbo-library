@@ -39,9 +39,6 @@
             <p class="text-muted">
               ISBN: <%= book.getIsbn() %>
             </p>
-            <p class="text-muted">
-              URL Gambar: <%= book.getImageUrl() %>
-            </p>
             <hr />
             <h5 class="fw-bold">Deskripsi</h5>
             <p class="text-justify"><%= book.getDetails() %></p>

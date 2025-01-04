@@ -58,14 +58,15 @@
                             <td><%= book.getTitle() %></td>
                             <td><%= borrowing.getBorrowDate() %></td>
                             <td>
-                                <%= borrowing.isReturned() ? "Dikembalikan" : "Dipinjam" %>
+                                <%= borrowing.getStatus() %>
                             </td>
                             <td>
                                 <% if (!borrowing.isReturned()) { %>
-                                <form action="return-book" method="post">
-                                    <input type="hidden" name="borrowingId" value="<%= borrowing.getId() %>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Kembalikan</button>
-                                </form>
+                                    <form action="${pageContext.request.contextPath}/manage/users?action=return_book&id=<%= borrowing.getId() %>" method="post" 
+                                        onsubmit="return confirm('Apakah Anda yakin ingin mengembalikan buku ini?');">
+                                      <input type="hidden" name="borrowingId" value="<%= borrowing.getId() %>">
+                                      <button type="submit" class="btn btn-danger btn-sm">Kembalikan</button>
+                                  </form>                                  
                                 <% } %>
                             </td>
                         </tr>

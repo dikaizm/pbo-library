@@ -110,10 +110,19 @@ public class BorrowRecordDAO {
     }
 
     public void returnBook(int borrowingId) throws SQLException {
-        String sql = "DELETE FROM borrowing WHERE id = ?";
+        String sql = "UPDATE borrow_records SET status = 'returned' WHERE id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, borrowingId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void updateStatusToOverdue() throws SQLException {
+        String sql = "UPDATE borrow_records SET status = 'overdue' WHERE due_date < ? AND status = 'borrowed'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDate(1, new Date(System.currentTimeMillis()));
             stmt.executeUpdate();
         }
     }

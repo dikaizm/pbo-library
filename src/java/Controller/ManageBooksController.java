@@ -167,15 +167,25 @@ public class ManageBooksController extends HttpServlet {
 
                 if (title == null || title.isEmpty() || author == null || author.isEmpty() || isbn == null || isbn.isEmpty() || categoryIdStr == null || categoryIdStr.isEmpty() || publicationYearStr == null || publicationYearStr.isEmpty() || publisher == null || publisher.isEmpty() || quantityStr == null || quantityStr.isEmpty() || details == null || details.isEmpty() || imageUrl == null || imageUrl.isEmpty()) {
                     request.setAttribute("error", "Semua field harus diisi");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/books?action=add_page").forward(request, response);
+                    request.getRequestDispatcher("add_book.jsp").forward(request, response);
                     return;
                 }
 
                 if (bookDAO.isIsbnExists(isbn)) {
                     request.setAttribute("error", "ISBN sudah digunakan");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/books?action=add_page").forward(request, response);
+                    request.getRequestDispatcher("add_book.jsp").forward(request, response);
                     return;
                 }
+
+                request.setAttribute("title", title);
+                request.setAttribute("author", author);
+                request.setAttribute("isbn", isbn);
+                request.setAttribute("category", categoryIdStr);
+                request.setAttribute("publicationYear", publicationYearStr);
+                request.setAttribute("publisher", publisher);
+                request.setAttribute("quantity", quantityStr);
+                request.setAttribute("details", details);
+                request.setAttribute("imageUrl", imageUrl);
 
                 int categoryId = Integer.parseInt(categoryIdStr);
                 int publicationYear = Integer.parseInt(publicationYearStr);
@@ -219,7 +229,7 @@ public class ManageBooksController extends HttpServlet {
 
                 if (bookIdStr == null || bookIdStr.isEmpty() || title == null || title.isEmpty() || author == null || author.isEmpty() || isbn == null || isbn.isEmpty() || categoryIdStr == null || categoryIdStr.isEmpty() || publicationYearStr == null || publicationYearStr.isEmpty() || publisher == null || publisher.isEmpty() || quantityStr == null || quantityStr.isEmpty() || details == null || details.isEmpty() || imageUrl == null || imageUrl.isEmpty()) {
                     request.setAttribute("error", "Semua field harus diisi");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/edit_book.jsp").forward(request, response);
+                    request.getRequestDispatcher("edit_book.jsp").forward(request, response);
                     return;
                 }
 
@@ -244,7 +254,7 @@ public class ManageBooksController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/manage/books");
                 } else {
                     request.setAttribute("error", "Gagal mengubah buku");
-                    request.getRequestDispatcher(request.getContextPath() + "/manage/edit_book.jsp").forward(request, response);
+                    request.getRequestDispatcher("edit_book.jsp").forward(request, response);
                 }
             }
         } catch (Exception e) {

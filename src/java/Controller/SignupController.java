@@ -61,7 +61,7 @@ public class SignupController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.getRequestDispatcher("../error.jsp").forward(request, response);
         }
     }
 

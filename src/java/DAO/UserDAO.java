@@ -1,5 +1,7 @@
 package DAO;
 
+import Model.Book;
+import Model.BookCategory;
 import Model.BorrowRecord;
 import Model.Student;
 import Model.User;
@@ -49,32 +51,49 @@ public class UserDAO {
                     student.setPassword(rs.getString("password"));
                     student.setRole(rs.getString("role"));
                     student.setMajor(rs.getString("major"));
-                }
-            }
 
-            List<BorrowRecord> borrowRecords = new ArrayList<>();
-            String query2 = "SELECT * FROM borrow_records WHERE user_id = ?";
+                    List<BorrowRecord> borrowRecords = new ArrayList<>();
+                    String query2 = "SELECT br.*, b.*, bc.name AS category_name FROM borrow_records br JOIN books b ON br.book_id = b.id JOIN book_categories bc ON b.category_id = bc.id WHERE user_id = ?";
 
-            try (PreparedStatement stmt2 = connection.prepareStatement(query2)) {
-                stmt2.setInt(1, student.getId());
+                    try (PreparedStatement stmt2 = connection.prepareStatement(query2)) {
+                        stmt2.setInt(1, student.getId());
 
-                try (ResultSet rs2 = stmt2.executeQuery()) {
-                    while (rs2.next()) {
-                        BorrowRecord record = new BorrowRecord();
-                        record.setId(rs2.getInt("id"));
-                        record.setBookId(rs2.getInt("book_id"));
-                        record.setUserId(rs2.getInt("user_id"));
-                        record.setBorrowDate(rs2.getDate("borrow_date"));
-                        record.setReturnDate(rs2.getDate("return_date"));
-                        record.setDueDate(rs2.getDate("due_date"));
-                        record.setStatus(rs2.getString("status"));
+                        try (ResultSet rs2 = stmt2.executeQuery()) {
+                            while (rs2.next()) {
+                                BorrowRecord record = new BorrowRecord();
+                                record.setId(rs2.getInt("id"));
+                                record.setBookId(rs2.getInt("book_id"));
+                                record.setUserId(rs2.getInt("user_id"));
+                                record.setBorrowDate(rs2.getDate("borrow_date"));
+                                record.setReturnDate(rs2.getDate("return_date"));
+                                record.setDueDate(rs2.getDate("due_date"));
+                                record.setStatus(rs2.getString("status"));
 
-                        borrowRecords.add(record);
+                                Book book = new Book();
+                                book.setId(rs2.getInt("id"));
+                                book.setTitle(rs2.getString("title"));
+                                book.setAuthor(rs2.getString("author"));
+                                book.setPublisher(rs2.getString("publisher"));
+                                book.setPublicationYear(rs2.getInt("publication_year"));
+                                book.setCategoryId(Integer.parseInt(rs2.getString("category_id")));
+                                book.setQuantity(rs2.getInt("quantity"));
+
+                                BookCategory category = new BookCategory();
+                                category.setId(rs2.getInt("category_id"));
+                                category.setName(rs2.getString("category_name"));
+
+                                book.setCategory(category);
+
+                                record.setBook(book);
+
+                                borrowRecords.add(record);
+                            }
+                        }
                     }
+
+                    student.setBorrowRecords(borrowRecords);
                 }
             }
-
-            student.setBorrowRecords(borrowRecords);
 
         } catch (Exception e) {
             throw new SQLException(e.getMessage());
@@ -167,4 +186,12 @@ public class UserDAO {
         return users;
     }
 
+    public boolean deleteUserByEmail(String email) throws SQLException {
+        String query = "DELETE FROM users WHERE email = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            return stmt.executeUpdate() > 0;
+        }
+    }
 }

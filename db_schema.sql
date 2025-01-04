@@ -46,9 +46,9 @@ CREATE TABLE books (
     publication_year INT,
     quantity INT DEFAULT 1, -- Number of copies available
     category_id INT NOT NULL, -- Foreign key to book_categories table
-details text NULL;
-publisher VARCHAR(255) NOT NULL;
-image_url text NULL;	
+details text NULL,
+publisher VARCHAR(255) NOT NULL,
+image_url text NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES book_categories(id)

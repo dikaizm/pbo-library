@@ -46,36 +46,4 @@ public class BookController extends HttpServlet {
             request.getRequestDispatcher("../error.jsp").forward(request, response);
         }
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            // Mendapatkan parameter dari form
-            String action = request.getParameter("action");
-
-            if ("add".equals(action)) {
-                String title = request.getParameter("title");
-                String details = request.getParameter("details");
-                String publisher = request.getParameter("publisher");
-
-                // Mendapatkan koneksi dari JDBC
-                Connection connection = JDBC.getInstance().getConnection();
-                BookDAO bookDAO = new BookDAO(connection);
-
-                // Menambahkan buku baru
-                Book book = new Book();
-                book.setTitle(title);
-                book.setDetails(details);
-                book.setPublisher(publisher);
-                bookDAO.addBook(book);
-
-                // Redirect kembali ke halaman Librarian.jsp
-                response.sendRedirect("Librarian.jsp");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "An error occurred: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-    }
 }
