@@ -30,6 +30,12 @@ public class BorrowingController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "auth/login");
+            return;
+        }
+
         String action = request.getParameter("action");
 
         String borrowDaysParam = request.getParameter("borrowDays");
@@ -80,7 +86,7 @@ public class BorrowingController extends HttpServlet {
                     return;
                 }
 
-                if (!bookDAO.updateBookQuantity(bookId, book.getQuantity()-1)) {
+                if (!bookDAO.updateBookQuantity(bookId, book.getQuantity() - 1)) {
                     request.setAttribute("error", "Gagal meminjam buku");
                     request.getRequestDispatcher(request.getContextPath() + "/book").forward(request, response);
                     return;

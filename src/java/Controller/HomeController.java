@@ -20,12 +20,6 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            if (session.getAttribute("user") == null) {
-                response.sendRedirect("auth/login");
-                return;
-            }
-
             // Mendapatkan koneksi dari JDBC
             Connection connection = JDBC.getInstance().getConnection();
             BookDAO bookDAO = new BookDAO(connection);

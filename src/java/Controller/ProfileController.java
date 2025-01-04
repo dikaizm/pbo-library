@@ -14,6 +14,7 @@ import Model.User;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/profile")
 public class ProfileController extends HttpServlet {
@@ -21,6 +22,12 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            HttpSession session = request.getSession();
+            if (session.getAttribute("user") == null) {
+                response.sendRedirect(request.getContextPath() + "auth/login");
+                return;
+            }
+
             User user = (User) request.getSession().getAttribute("user");
 
             if (user == null) {

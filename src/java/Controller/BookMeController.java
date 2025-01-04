@@ -25,7 +25,6 @@ public class BookMeController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
-
             if (user == null) {
                 response.sendRedirect(request.getContextPath() + "/auth/login");
                 return;
