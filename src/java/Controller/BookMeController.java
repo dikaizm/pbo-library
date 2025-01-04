@@ -39,6 +39,10 @@ public class BookMeController extends HttpServlet {
             int categoryId = 0; // Default value in case the parameter is missing or invalid
             String status = request.getParameter("status");
 
+            if (status == null || status.isEmpty()) {
+                status = "borrowed";
+            }
+
             if (categoryParamId != null && !categoryParamId.isEmpty()) {
                 try {
                     categoryId = Integer.parseInt(categoryParamId);
