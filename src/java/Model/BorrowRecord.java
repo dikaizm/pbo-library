@@ -38,7 +38,7 @@ public class BorrowRecord {
     }
 
     public boolean isReturned() {
-        return returnDate != null;
+        return returnDate != null || "returned".equals(status);
     }
 
     /**
