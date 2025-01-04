@@ -48,6 +48,14 @@ public class SignupController extends HttpServlet {
                 }
 
                 if (userDAO.createUser(name, email, password, role)) {
+                    if ("student".equals(role)) {
+                        User user = userDAO.getUserByEmail(email);
+                        userDAO.createStudent(user.getId(), request.getParameter("major"));
+                    } else if ("librarian".equals(role)) {
+                        User user = userDAO.getUserByEmail(email);
+                        userDAO.createLibrarian(user.getId(), request.getParameter("department"));
+                    }
+
                     request.setAttribute("success", true);
                 } else {
                     request.setAttribute("error", "Gagal membuat akun.");

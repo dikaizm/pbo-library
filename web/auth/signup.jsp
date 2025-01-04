@@ -7,6 +7,24 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
     />
+    <script>
+      function handleRoleChange() {
+        const role = document.getElementById("role").value;
+        const majorField = document.getElementById("majorField");
+        const departmentField = document.getElementById("departmentField");
+
+        if (role === "student") {
+          majorField.style.display = "block";
+          departmentField.style.display = "none";
+        } else if (role === "librarian") {
+          majorField.style.display = "none";
+          departmentField.style.display = "block";
+        } else {
+          majorField.style.display = "none";
+          departmentField.style.display = "none";
+        }
+      }
+    </script>
   </head>
   <body class="bg-light">
     <%@include file="../components/navbar.jsp" %>
@@ -51,14 +69,46 @@
           </div>
           <div class="mb-3">
             <label for="role" class="form-label">Role</label>
-            <select class="form-select" id="role" name="role" required>
+            <select
+              class="form-select"
+              id="role"
+              name="role"
+              required
+              onchange="handleRoleChange()"
+            >
+              <option value="">Select Role</option>
               <option value="student">Student</option>
               <option value="librarian">Librarian</option>
             </select>
           </div>
+
+          <!-- Field Major -->
+          <div class="mb-3" id="majorField" style="display: none">
+            <label for="major" class="form-label">Major</label>
+            <input
+              type="text"
+              class="form-control"
+              id="major"
+              name="major"
+              placeholder="Enter your major"
+            />
+          </div>
+
+          <!-- Field Department -->
+          <div class="mb-3" id="departmentField" style="display: none">
+            <label for="department" class="form-label">Department</label>
+            <input
+              type="text"
+              class="form-control"
+              id="department"
+              name="department"
+              placeholder="Enter your department"
+            />
+          </div>
+
           <button type="submit" class="btn btn-primary w-100">Sign Up</button>
         </form>
-        
+
         <% if (request.getAttribute("error") != null) { %>
         <p class="text-danger mt-3 text-center">
           User already exists. Please choose a different email.

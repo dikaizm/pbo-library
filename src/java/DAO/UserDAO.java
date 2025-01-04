@@ -34,6 +34,34 @@ public class UserDAO {
         }
     }
 
+    public boolean createStudent(int id, String major) {
+        String query = "INSERT INTO students (user_id, major) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            stmt.setString(2, major);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean createLibrarian(int id, String department) {
+        String query = "INSERT INTO librarians (user_id, department) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            stmt.setString(2, department);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public Student getStudentByEmail(String email) throws SQLException {
         String query = "SELECT u.*, s.* FROM users u LEFT JOIN students s ON s.user_id = u.id WHERE email = ?";
         Student student = null;
